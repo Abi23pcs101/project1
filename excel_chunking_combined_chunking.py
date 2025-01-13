@@ -4,9 +4,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from groq import Groq
 
-#client = Groq(api_key="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")
+client = Groq(api_key="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")   #llama 3.3
 
-client=Groq(api_key="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")
+#client=Groq(api_key="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")   #llama 3.2
 def combine_rows_columns(df):
     """Combines rows and columns into text chunks."""
     chunks = []
@@ -113,8 +113,8 @@ if st.button("submit"):
         completion = None
         try:
             completion = client.chat.completions.create(
-                #model="llama-3.3-70b-versatile",
-                model="llama-3.2-1b-preview",
+                model="llama-3.3-70b-versatile",
+                #model="llama-3.2-1b-preview",
                 messages=[{"role": "user", "content": f"use the data {context} only and frame the answer for this question {user_query} in formal english"}],
                 #messages=[{"role":"user","content":context}],
                 temperature=1,
