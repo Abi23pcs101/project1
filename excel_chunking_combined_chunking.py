@@ -37,6 +37,14 @@ def vectorizing(get_chunk):
     # )
 
     #st.write("Vectors stored into db successfully")
+def process_chunks_in_batches(query, chunks, batch_size=10):
+    """Processes chunks in batches to handle large datasets."""
+    results = []
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i + batch_size]
+        batch_relevance = get_relevant_chunks(query, batch, top_n=batch_size)
+        results.extend(batch_relevance)
+    return results
 
 # # Function to get relevant chunks using TF-IDF and cosine similarity
 def get_relevant_chunks(query, chunks, top_n=50): 
@@ -149,7 +157,8 @@ if st.button("submit"):
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
         chunks = combine_rows_columns(df)
-        relevant_chunks=get_relevant_chunks(user_query,chunks)
+        #relevant_chunks=get_relevant_chunks(user_query,chunks)
+        relevant_chunks=process_chunks_in_batches(user_query,chunks,batch_size=10)
         #relevant_chunks = get_relevant_chunks(user_query, chunks, top_n=3, similarity_weight=1.0, ranking_weight=0.5)
 
 
