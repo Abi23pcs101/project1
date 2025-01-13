@@ -188,7 +188,7 @@ user_query=st.text_input("Enter the user query")
 if st.button("submit"):
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
-        chunks = semantic_chunking(df, key_column="category", max_chunk_size=500)
+        chunks = semantic_chunking(df, key_column="src_ip", max_chunk_size=500)
         #relevant_chunks = process_chunks_in_batches(user_query, chunks, batch_size=10)
         #chunks = combine_rows_columns(df)
         relevant_chunks=get_relevant_chunks(user_query,chunks)
