@@ -47,7 +47,7 @@ def process_chunks_in_batches(query, chunks, batch_size=10):
     return results
 
 # # Function to get relevant chunks using TF-IDF and cosine similarity
-def get_relevant_chunks(query, chunks, top_n=50): 
+def get_relevant_chunks(query, chunks, top_n=30): 
     """
     Retrieve the most relevant chunks using SentenceTransformer and cosine similarity.
     
