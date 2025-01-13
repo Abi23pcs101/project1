@@ -1,9 +1,7 @@
 import pandas as pd
 import streamlit as st
-#from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-#import chromadb
 from groq import Groq
 
 #client = Groq(api_key="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")
@@ -23,18 +21,7 @@ def vectorizing(get_chunk):
     model = SentenceTransformer('all-MiniLM-L6-v2')
     # Convert the text chunks into vectors
     vectors = model.encode(get_chunk)
-    return vectors
-
-    
-    # Initialize Chroma client and create a collection
-    # client = chromadb.Client()
-    # collection = client.create_collection("my_collection")
-
-    # # Add the vectors to the Chroma collection
-    # collection.add(
-    #     documents=get_chunk,  # Text data
-    #     embeddings=vectors  # Corresponding vectors
-    # )
+    return vector
 
     #st.write("Vectors stored into db successfully")
 def process_chunks_in_batches(query, chunks, batch_size=10):
@@ -105,84 +92,8 @@ def semantic_chunking(df, key_column, max_chunk_size=500):
     
     return chunks
 
-# def get_relevant_chunks(query, chunks, threshold=0.3):
-#     """
-#     Retrieve all chunks with similarity above a threshold using TF-IDF vectorization.
-    
-#     Args:
-#         query (str): The search query.
-#         chunks (list of str): A list of text chunks.
-#         threshold (float): Minimum similarity score to consider a chunk relevant.
-    
-#     Returns:
-#         list of str: Relevant chunks sorted by similarity.
-#     """
-#     # Create a TfidfVectorizer
-#     vectorizer = TfidfVectorizer()
-    
-#     # Fit and transform the chunks and the query
-#     vectors = vectorizer.fit_transform(chunks + [query])
-    
-#     # Separate the vectors for the chunks and the query
-#     chunk_vectors = vectors[:-1]  # All except the last (which is the query)
-#     query_vector = vectors[-1]  # The last one is the query
-    
-#     # Compute cosine similarity
-#     cosine_sim = cosine_similarity(query_vector, chunk_vectors).flatten()
-#     st.write(cosine_sim)
-    
-#     # Filter chunks by similarity threshold
-#     relevant_indices = [i for i, sim in enumerate(cosine_sim) if sim >= threshold]
-    
-#     # Sort by similarity in descending order
-#     relevant_indices = sorted(relevant_indices, key=lambda i: cosine_sim[i], reverse=True)
-    
-#     return [chunks[i] for i in relevant_indices]
 
-
-
-
-
-# def get_relevant_chunks(query, chunks, top_n=5, similarity_weight=1.0, ranking_weight=0.5):
-#     """
-#     Retrieve relevant chunks based on a weighted combination of similarity score and rank.
-    
-#     Args:
-#         query (str): The search query.
-#         chunks (list of str): A list of text chunks.
-#         top_n (int): The number of top relevant chunks to return.
-#         similarity_weight (float): Weight for the cosine similarity score.
-#         ranking_weight (float): Weight for ranking based on chunk relevance.
-    
-#     Returns:
-#         list of str: Top relevant chunks based on weighted scores.
-#     """
-#     # Vectorize the query and the chunks using TF-IDF
-#     vectorizer = TfidfVectorizer()
-#     vectors = vectorizer.fit_transform(chunks + [query])
-
-#     # Compute cosine similarity
-#     cosine_sim = cosine_similarity(vectors[-1], vectors[:-1]).flatten()
-
-#     # Combine similarity scores with their respective ranks (higher rank = more relevance)
-#     weighted_scores = [
-#         (i, cosine_sim[i] * similarity_weight + (len(chunks) - i) * ranking_weight)
-#         for i in range(len(chunks))
-#     ]
-    
-#     # Sort based on the weighted score
-#     weighted_scores.sort(key=lambda x: x[1], reverse=True)
-
-#     # Return top_n chunks based on the weighted score
-#     top_chunks = [chunks[i] for i, _ in weighted_scores[:top_n]]
-
-#     return top_chunks
-
-
-
-
-
-st.title("Excel Analyser")
+st.title("Honeypot Data Analyser")
 uploaded_file=st.file_uploader("Upload an file",type=["csv"])
 user_query=st.text_input("Enter the user query")
 if st.button("submit"):
@@ -190,12 +101,10 @@ if st.button("submit"):
         df = pd.read_csv(uploaded_file)
         #chunks = semantic_chunking(df, key_column="date", max_chunk_size=500)
         #relevant_chunks = process_chunks_in_batches(user_query, chunks, batch_size=10)
+        
         chunks = combine_rows_columns(df)
         relevant_chunks=get_relevant_chunks(user_query,chunks)
-        #relevant_chunks=process_chunks_in_batches(user_query,chunks,batch_size=10)
-        #relevant_chunks = get_relevant_chunks(user_query, chunks, top_n=3, similarity_weight=1.0, ranking_weight=0.5)
-
-
+    
         #st.write(relevant_chunks)
         if user_query:
             context = "\n\n".join(relevant_chunks)
