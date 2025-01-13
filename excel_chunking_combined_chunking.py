@@ -204,7 +204,8 @@ if st.button("submit"):
         completion = None
         try:
             completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                #model="llama-3.3-70b-versatile",
+                model="llama-3.2-1b-preview",
                 messages=[{"role": "user", "content": f"use the data {context} only and frame the answer for this question {user_query} in formal english"}],
                 #messages=[{"role":"user","content":context}],
                 temperature=1,
