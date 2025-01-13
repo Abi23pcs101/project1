@@ -188,9 +188,9 @@ user_query=st.text_input("Enter the user query")
 if st.button("submit"):
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
-        chunks = semantic_chunking(df, key_column="date", max_chunk_size=500)
+        #chunks = semantic_chunking(df, key_column="date", max_chunk_size=500)
         #relevant_chunks = process_chunks_in_batches(user_query, chunks, batch_size=10)
-        #chunks = combine_rows_columns(df)
+        chunks = combine_rows_columns(df)
         relevant_chunks=get_relevant_chunks(user_query,chunks)
         #relevant_chunks=process_chunks_in_batches(user_query,chunks,batch_size=10)
         #relevant_chunks = get_relevant_chunks(user_query, chunks, top_n=3, similarity_weight=1.0, ranking_weight=0.5)
@@ -219,13 +219,7 @@ if st.button("submit"):
             st.write(response_text)  # Update the output dynamically    
         except Exception as e:
             st.write(e)
-        # answer = genai.gemini.model.generate_content(
-        #             f"use the data {context} and frame the answer for this question {question} use this template  in formal english"
-        #         )
-        # result_text = answer.candidates[0].content.parts[0].text
-        #vectorizing(chunks)
-        #st.write(chunks)
-        
+     
        
 
     else:
