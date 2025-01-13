@@ -6,9 +6,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 #import chromadb
 from groq import Groq
 
-client = Groq(api_key="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")
+#client = Groq(api_key="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")
 
-
+client=Groq(api_key="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")
 def combine_rows_columns(df):
     """Combines rows and columns into text chunks."""
     chunks = []
