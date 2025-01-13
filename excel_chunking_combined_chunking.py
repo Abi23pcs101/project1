@@ -39,7 +39,7 @@ def vectorizing(get_chunk):
     #st.write("Vectors stored into db successfully")
 
 # # Function to get relevant chunks using TF-IDF and cosine similarity
-def get_relevant_chunks(query, chunks, top_n=100): 
+def get_relevant_chunks(query, chunks, top_n=50): 
     """
     Retrieve the most relevant chunks using SentenceTransformer and cosine similarity.
     
